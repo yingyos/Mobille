@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MainActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">buusk.bc.labsqlite000; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.ListView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+    ListView ContactListView; 
+    Button button; 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_main); 
+        ContactListView = (ListView) findViewById(R.id.lv1); 
+        button = (Button)findViewById(R.id.button); 
+        </span><span class="s2">// add</span><span class="s1"> 
+        DatabaseHandler db = </span><span class="s0">new </span><span class="s1">DatabaseHandler(</span><span class="s0">this</span><span class="s1">); 
+        Log.d(</span><span class="s3">&quot;Yingyos Insert: &quot;</span><span class="s1">,</span><span class="s3">&quot;Inserting ... &quot;</span><span class="s1">); 
+ 
+        </span><span class="s2">//db.addContact(new Contact(&quot;Yingyos&quot;,&quot;58410000&quot;));</span><span class="s1"> 
+        </span><span class="s2">//db.addContact(new Contact(&quot;Student1&quot;,&quot;58410001&quot;));</span><span class="s1"> 
+        </span><span class="s2">//db.addContact(new Contact(&quot;Student2&quot;,&quot;58410002&quot;));</span><span class="s1"> 
+        </span><span class="s2">//db.addContact(new Contact(&quot;Student3&quot;,&quot;58410003&quot;));</span><span class="s1"> 
+ 
+        </span><span class="s2">// read all</span><span class="s1"> 
+        Log.d(</span><span class="s3">&quot;Yingyos Reading:&quot;</span><span class="s1">, </span><span class="s3">&quot;Reading all contacts..&quot;</span><span class="s1">); 
+        List&lt;Contact&gt; contacts = db.getAllContacts(); 
+ 
+        </span><span class="s0">for </span><span class="s1">(Contact cn : contacts){ 
+            String log = </span><span class="s3">&quot;Id: &quot; </span><span class="s1">+ cn.getId()+</span><span class="s3">&quot; ,Name: &quot; </span><span class="s1">+ 
+                    cn.getName() + </span><span class="s3">&quot; ,Phone: &quot; </span><span class="s1">+ 
+                    cn.getPhone_number(); 
+            Log.d(</span><span class="s3">&quot;Name: &quot;</span><span class="s1">, log); 
+ 
+        } 
+ 
+ 
+    button.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+        @Override 
+        </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+            Intent intent = </span><span class="s0">new </span><span class="s1">Intent(MainActivity.</span><span class="s0">this</span><span class="s1">, ListViewActivity.</span><span class="s0">class</span><span class="s1">); 
+            startActivity(intent); 
+        } 
+    }); 
+ 
+    } 
+ 
+ 
+ 
+ 
+} 
+</span></pre>
+</body>
+</html>

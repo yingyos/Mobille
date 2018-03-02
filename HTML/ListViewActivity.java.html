@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>ListViewActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+ListViewActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">buusk.bc.labsqlite000; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.annotation.Nullable; 
+</span><span class="s0">import </span><span class="s1">android.widget.ListView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+</span><span class="s2">/** 
+ * Created by yingyos on 2/3/2018 AD. 
+ */</span><span class="s1"> 
+ 
+</span><span class="s0">public class </span><span class="s1">ListViewActivity </span><span class="s0">extends </span><span class="s1">Activity { 
+    </span><span class="s2">//SQLiteHelper SQLITEHELPER;</span><span class="s1"> 
+    DatabaseHandler SQLITEHELPER; 
+    SQLiteDatabase SQLITEDATABASE; 
+    Cursor cursor; 
+    </span><span class="s2">//SQLiteListAdapter ListAdapter ;</span><span class="s1"> 
+    ListAdapterClass ListAdapter; 
+ 
+    ArrayList&lt;String&gt; ID_ArrayList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+    ArrayList&lt;String&gt; NAME_ArrayList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+    ArrayList&lt;String&gt; PHONE_NUMBER_ArrayList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+ 
+    ListView LISTVIEW; 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(@Nullable Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.listview1); 
+ 
+        LISTVIEW = (ListView) findViewById(R.id.listview1); 
+ 
+        SQLITEHELPER = </span><span class="s0">new </span><span class="s1">DatabaseHandler(</span><span class="s0">this</span><span class="s1">); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onResume() { 
+ 
+        ShowSQLiteDBdata() ; 
+ 
+        </span><span class="s0">super</span><span class="s1">.onResume(); 
+    } 
+ 
+    </span><span class="s0">private void </span><span class="s1">ShowSQLiteDBdata() { 
+ 
+        SQLITEDATABASE = SQLITEHELPER.getWritableDatabase(); 
+ 
+        cursor = SQLITEDATABASE.rawQuery(</span><span class="s3">&quot;SELECT * FROM contacts&quot;</span><span class="s1">, </span><span class="s0">null</span><span class="s1">); 
+ 
+        ID_ArrayList.clear(); 
+        NAME_ArrayList.clear(); 
+        PHONE_NUMBER_ArrayList.clear(); 
+ 
+        </span><span class="s0">if </span><span class="s1">(cursor.moveToFirst()) { 
+            </span><span class="s0">do </span><span class="s1">{ 
+                ID_ArrayList.add(cursor.getString(cursor.getColumnIndex(DatabaseHandler.KEY_ID))); 
+ 
+                NAME_ArrayList.add(cursor.getString(cursor.getColumnIndex(DatabaseHandler.KEY_NAME))); 
+ 
+                PHONE_NUMBER_ArrayList.add(cursor.getString(cursor.getColumnIndex(DatabaseHandler.KEY_PH_NO))); 
+ 
+            } </span><span class="s0">while </span><span class="s1">(cursor.moveToNext()); 
+ 
+            ListAdapter = </span><span class="s0">new </span><span class="s1">ListAdapterClass(ListViewActivity.</span><span class="s0">this</span><span class="s1">, 
+ 
+                    ID_ArrayList, 
+                    NAME_ArrayList, 
+                    PHONE_NUMBER_ArrayList 
+ 
+            ); 
+            LISTVIEW.setAdapter(ListAdapter); 
+ 
+            cursor.close(); 
+        } 
+    } 
+} 
+</span></pre>
+</body>
+</html>

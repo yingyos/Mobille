@@ -1,0 +1,180 @@
+<html>
+<head>
+<title>DatabaseHandler.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+.s5 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+DatabaseHandler.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">buusk.bc.labsqlite000; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.ContentValues; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">java.util.List; 
+ 
+</span><span class="s2">/** 
+ * Created by yingyos on 16/2/2018 AD. 
+ */</span><span class="s1"> 
+ 
+</span><span class="s0">public class </span><span class="s1">DatabaseHandler </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper { 
+    </span><span class="s0">private static final int </span><span class="s1">version = </span><span class="s3">1</span><span class="s1">; 
+    </span><span class="s0">private static final </span><span class="s1">String name = </span><span class="s4">&quot;contactsManager&quot;</span><span class="s1">; 
+ 
+    </span><span class="s0">public </span><span class="s1">DatabaseHandler(Context context) { 
+        </span><span class="s0">super</span><span class="s1">(context, name, </span><span class="s0">null</span><span class="s1">, version); 
+    } 
+ 
+    </span><span class="s0">public static final </span><span class="s1">String KEY_ID = </span><span class="s4">&quot;id&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String KEY_NAME = </span><span class="s4">&quot;name&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String KEY_PH_NO = </span><span class="s4">&quot;phone_number&quot;</span><span class="s1">; 
+ 
+    </span><span class="s0">private static final </span><span class="s1">String TABLE_CONTACTS = </span><span class="s4">&quot;contacts&quot;</span><span class="s1">; 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db) { 
+        </span><span class="s2">//String sqlstring = &quot;CREATE TABLE contacts (id INTEGER PRIMARY KEY, name TEXT,phone_number TEXT)&quot;</span><span class="s1"> 
+        String CREATE_CONTACTS_TABLE = </span><span class="s4">&quot;CREATE TABLE &quot; </span><span class="s1">+ TABLE_CONTACTS + </span><span class="s4">&quot; (&quot;</span><span class="s1"> 
+                + KEY_ID + </span><span class="s4">&quot; INTEGER PRIMARY KEY, &quot; </span><span class="s1">+ KEY_NAME + </span><span class="s4">&quot; TEXT, &quot;</span><span class="s1"> 
+                + KEY_PH_NO + </span><span class="s4">&quot; TEXT)&quot;</span><span class="s1">; 
+        db.execSQL(CREATE_CONTACTS_TABLE); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db, </span><span class="s0">int </span><span class="s1">oldVersion, </span><span class="s0">int </span><span class="s1">newVersion) { 
+        db.execSQL(</span><span class="s4">&quot;DROP TABLE IF EXISTS &quot; </span><span class="s1">+ TABLE_CONTACTS); 
+        onCreate(db); 
+    } 
+ 
+    </span><span class="s2">/** 
+     * All CRUD(Create, Read, Update, Delete) Operations 
+     * เราจะ(จง)สร้าง method การดำเนินการเพื่อ 
+     * เพิ่มข้อมูล          public void addContact(Contact contact){} 
+     * ดึงข้อมูลระบุ id     public Contact getContact(int id){} 
+     * ดึงข้อมูลทั้งหมด      public List</span><span class="s5">&lt;Contact&gt; </span><span class="s2">getAllContacts(){} 
+     * นับจำนวนข้อมูล      public int getContactsCount(){} 
+     * ปรับปรุงข้อมูล       public int updateContact(Contact contact){} 
+     * ลบข้อมูล           public void deleteContact(Contact contact){} 
+     * */</span><span class="s1"> 
+    </span><span class="s2">// Adding new contact เพิ่มข้อมูล</span><span class="s1"> 
+    </span><span class="s0">public void </span><span class="s1">addContact(Contact contact){ 
+        </span><span class="s2">// 1. กำหนดคุณสมบัติด้วย SQLiteDatabase ในการใช้ database อ่าน, เขียน(getWritableDatabase)</span><span class="s1"> 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+ 
+        </span><span class="s2">// 2. นำค่าใส่ตัวแปรแบบ ContentValues</span><span class="s1"> 
+        ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+ 
+        values.put(KEY_NAME, contact.getName()); 
+        values.put(KEY_PH_NO, contact.getPhone_number()); 
+ 
+        </span><span class="s2">// 3. ทำการสั่งเพิ่มข้อมูลด้วย .insert</span><span class="s1"> 
+        db.insert(TABLE_CONTACTS,</span><span class="s0">null</span><span class="s1">,values); 
+        </span><span class="s2">// 4. ปิด database</span><span class="s1"> 
+        db.close(); 
+    } 
+ 
+    </span><span class="s2">// ดึงข้อมูลระบุ id</span><span class="s1"> 
+    </span><span class="s0">public </span><span class="s1">Contact getContact(</span><span class="s0">int </span><span class="s1">id){ 
+        </span><span class="s2">// 1. กำหนดคุณสมบัติด้วย SQLiteDatabase</span><span class="s1"> 
+        </span><span class="s2">// ในการใช้ database เพื่ออ่านโดยใช้ getReadableDatabase()</span><span class="s1"> 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+ 
+        </span><span class="s2">// 1  Yingyos  0816973226</span><span class="s1"> 
+        </span><span class="s2">// 2  Bumbim   5222556793   &lt;-  id = 2</span><span class="s1"> 
+        </span><span class="s2">// 3  Dugdig   0983423456</span><span class="s1"> 
+ 
+        </span><span class="s2">// 2. ใช้ Cursor ในการระบุเรคคอร์ด ที่ต้องการ ด้วย query ที่ประกอบด้วย</span><span class="s1"> 
+        </span><span class="s2">//    ชื่อตาราง, คำสั่ง SQL</span><span class="s1"> 
+        Cursor cursor = db.query(TABLE_CONTACTS, 
+                </span><span class="s0">new </span><span class="s1">String [] {KEY_ID,KEY_NAME,KEY_PH_NO}, 
+                KEY_ID + </span><span class="s4">&quot;=?&quot;</span><span class="s1">, </span><span class="s0">new </span><span class="s1">String[]{String.valueOf(id)}, 
+                </span><span class="s0">null</span><span class="s1">,</span><span class="s0">null</span><span class="s1">,</span><span class="s0">null</span><span class="s1">,</span><span class="s0">null</span><span class="s1">); 
+        </span><span class="s0">if </span><span class="s1">(cursor != </span><span class="s0">null</span><span class="s1">) 
+            cursor.moveToFirst(); 
+        </span><span class="s2">// 3. เอาค่าข้อมูลที่ cursor อ่านได้มาใส่ contact</span><span class="s1"> 
+        Contact contact = </span><span class="s0">new </span><span class="s1">Contact(Integer.parseInt(cursor.getString(</span><span class="s3">0</span><span class="s1">)), 
+                cursor.getString(</span><span class="s3">1</span><span class="s1">),cursor.getString(</span><span class="s3">2</span><span class="s1">)); 
+        </span><span class="s0">return </span><span class="s1">contact; 
+    } 
+ 
+    </span><span class="s2">// ดึงข้อมูลทั้งหมด</span><span class="s1"> 
+    </span><span class="s2">// 1  Yingyos  0816973226</span><span class="s1"> 
+    </span><span class="s2">// 2  Bumbim   5222556793</span><span class="s1"> 
+    </span><span class="s2">// 3  Dugdig   0983423456</span><span class="s1"> 
+ 
+    </span><span class="s0">public </span><span class="s1">List&lt;Contact&gt; getAllContacts(){ 
+        </span><span class="s2">// 1. ทำการสร้างตัวแปร array สำหรับเก็บข้อมูลโดยใช้ ArrayList</span><span class="s1"> 
+        List&lt;Contact&gt; contactList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;Contact&gt;(); 
+        </span><span class="s2">// 2. สร้างคำสั่งคิวรี่</span><span class="s1"> 
+        String selectQuery = </span><span class="s4">&quot;SELECT * FROM &quot; </span><span class="s1">+ TABLE_CONTACTS; 
+        </span><span class="s2">// 3. กำหนดคุณสมบัติเพื่อใช้งาน database</span><span class="s1"> 
+        </span><span class="s2">//    ซึ่งจะกำหนดให้เป็นแบบอ่าน เพื่อใช้กับ Cursor เมื่อต้องทำการ move cursor</span><span class="s1"> 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        </span><span class="s2">// 4. สร้างตัวแปร Cursor เพื่อจะใช้ระบุการอ่านแต่ละเรคคอร์ดในตาราง</span><span class="s1"> 
+        Cursor cursor = db.rawQuery(selectQuery,</span><span class="s0">null</span><span class="s1">); 
+ 
+        </span><span class="s0">if</span><span class="s1">(cursor.moveToFirst()){ 
+         </span><span class="s2">// 5. ทำการอ่านค่าแต่ละเรคคอร์ดด้วย cursor และนำเข้าตัวแปร contactList</span><span class="s1"> 
+            </span><span class="s0">do </span><span class="s1">{ 
+                Contact contact = </span><span class="s0">new </span><span class="s1">Contact(); 
+                contact.setId(Integer.parseInt(cursor.getString(</span><span class="s3">0</span><span class="s1">))); 
+                contact.setName(cursor.getString(</span><span class="s3">1</span><span class="s1">)); 
+                contact.setPhone_number(cursor.getString(</span><span class="s3">2</span><span class="s1">)); 
+ 
+                contactList.add(contact); 
+            }</span><span class="s0">while</span><span class="s1">(cursor.moveToNext()); 
+        } 
+ 
+ 
+        </span><span class="s0">return </span><span class="s1">contactList; 
+    } 
+ 
+    </span><span class="s2">//นับจำนวนข้อมูล</span><span class="s1"> 
+    </span><span class="s0">public int </span><span class="s1">getContactsCount(){ 
+        String countQuery = </span><span class="s4">&quot;SELECT * FROM &quot; </span><span class="s1">+ TABLE_CONTACTS; 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getReadableDatabase(); 
+        Cursor cursor = db.rawQuery(countQuery,</span><span class="s0">null</span><span class="s1">); 
+        db.close(); 
+        </span><span class="s0">return </span><span class="s1">cursor.getCount(); 
+    } 
+ 
+    </span><span class="s2">//* ปรับปรุงข้อมูล</span><span class="s1"> 
+    </span><span class="s0">public int </span><span class="s1">updateContact(Contact contact){ 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        </span><span class="s2">// เตรียมข้อมูลที่เราจะทำการแก้ไข</span><span class="s1"> 
+        ContentValues values = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+        values.put(KEY_NAME,contact.getName()); 
+        values.put(KEY_PH_NO,contact.getPhone_number()); 
+ 
+        </span><span class="s0">return </span><span class="s1">db.update(TABLE_CONTACTS,values, KEY_ID+ </span><span class="s4">&quot; = ?&quot;</span><span class="s1">, 
+                </span><span class="s0">new </span><span class="s1">String[]{String.valueOf(contact.getId()) }); 
+    } 
+ 
+    </span><span class="s2">//ลบข้อมูล</span><span class="s1"> 
+    </span><span class="s0">public void </span><span class="s1">deleteContact(Contact contact){ 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        db.delete(TABLE_CONTACTS,KEY_ID + </span><span class="s4">&quot; = ?&quot;</span><span class="s1">, 
+                </span><span class="s0">new </span><span class="s1">String[]{String.valueOf(contact.getId()) }); 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

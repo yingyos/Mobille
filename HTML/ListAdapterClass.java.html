@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>ListAdapterClass.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+ListAdapterClass.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">buusk.bc.labsqlite000; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.view.LayoutInflater; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.view.ViewGroup; 
+</span><span class="s0">import </span><span class="s1">android.widget.BaseAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+</span><span class="s2">/** 
+ * Created by yingyos on 2/3/2018 AD. 
+ */</span><span class="s1"> 
+ 
+</span><span class="s0">class </span><span class="s1">ListAdapterClass </span><span class="s0">extends </span><span class="s1">BaseAdapter { 
+    Context context; 
+    ArrayList&lt;String&gt; uID; 
+    ArrayList&lt;String&gt; uName; 
+    ArrayList&lt;String&gt; uPhoneNumber; 
+ 
+    </span><span class="s0">public </span><span class="s1">ListAdapterClass( 
+            Context context2, 
+            ArrayList&lt;String&gt; id, 
+            ArrayList&lt;String&gt; name, 
+            ArrayList&lt;String&gt; phone) { 
+        </span><span class="s0">this</span><span class="s1">.context = context2; 
+        </span><span class="s0">this</span><span class="s1">.uID = id; 
+        </span><span class="s0">this</span><span class="s1">.uName = name; 
+        </span><span class="s0">this</span><span class="s1">.uPhoneNumber = phone; 
+    } 
+ 
+    </span><span class="s0">public int </span><span class="s1">getCount() { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">return </span><span class="s1">uID.size(); 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">Object getItem(</span><span class="s0">int </span><span class="s1">position) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">return null</span><span class="s1">; 
+    } 
+ 
+    </span><span class="s0">public long </span><span class="s1">getItemId(</span><span class="s0">int </span><span class="s1">position) { 
+        </span><span class="s2">// TODO Auto-generated method stub</span><span class="s1"> 
+        </span><span class="s0">return </span><span class="s3">0</span><span class="s1">; 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">View getView(</span><span class="s0">int </span><span class="s1">position, View child, ViewGroup parent) { 
+ 
+        Holder holder; 
+        LayoutInflater layoutInflater; 
+ 
+        </span><span class="s0">if </span><span class="s1">(child == </span><span class="s0">null</span><span class="s1">) { 
+            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
+            child = layoutInflater.inflate(R.layout.lvcolumn, </span><span class="s0">null</span><span class="s1">); 
+ 
+            holder = </span><span class="s0">new </span><span class="s1">Holder(); 
+ 
+            holder.textviewid = (TextView) child.findViewById(R.id.tv1); 
+            holder.textviewname = (TextView) child.findViewById(R.id.tv2); 
+            holder.textviewphone_number = (TextView) child.findViewById(R.id.tv3); 
+ 
+ 
+            child.setTag(holder); 
+ 
+        } </span><span class="s0">else </span><span class="s1">{ 
+ 
+            holder = (Holder) child.getTag(); 
+        } 
+        holder.textviewid.setText(uID.get(position)); 
+        holder.textviewname.setText(uName.get(position)); 
+        holder.textviewphone_number.setText(uPhoneNumber.get(position)); 
+ 
+ 
+        </span><span class="s0">return </span><span class="s1">child; 
+    } 
+ 
+    </span><span class="s0">public class </span><span class="s1">Holder { 
+        TextView textviewid; 
+        TextView textviewname; 
+        TextView textviewphone_number; 
+ 
+    } 
+} 
+ 
+</span></pre>
+</body>
+</html>
